@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 3</title>
+    <style>
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 4px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 36px;
+            border: 2px solid black;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>TIC - TAC - TOE !!!!!!</h1>
+    <div id="game-board">
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+        <button class="cell"></button>
+    </div>
+    <script>
+        const cells = document.querySelectorAll('.cell');
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', '']; // Represents the game board state
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+
+        function handleCellClick(event) {
+            const index = Array.from(cells).indexOf(event.target);
+            if (gameBoard[index] === '' && !checkWinner()) {
+                gameBoard[index] = currentPlayer;
+                event.target.textContent = currentPlayer;
+                if (checkWinner()) {
+                    alert(`${currentPlayer} wins!`);
+                } else if (!gameBoard.includes('')) {
+                    alert("It's a draw!");
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkWinner() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            return winningCombos.some(combo => {
+                return gameBoard[combo[0]] !== '' &&
+                    gameBoard[combo[0]] === gameBoard[combo[1]] &&
+                    gameBoard[combo[1]] === gameBoard[combo[2]];
+            });
+        }
+    </script>
+</body>
+</html>

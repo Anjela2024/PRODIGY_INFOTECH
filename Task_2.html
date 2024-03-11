@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 2</title>
+    <style>
+        body{
+            background-image: url('http://www.zingerbugimages.com/backgrounds/green_sand_stone.jpg');
+        }
+        .container {
+            width: 350px; /* Adjust the width as needed */
+            margin: 0 auto;
+            border: 2px solid #4b8455;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #stopwatch {
+            text-align: center;
+        }
+
+        #display {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">STOP WATCH - BASIC</h1>
+    <div class="container">
+        <div id="stopwatch">
+            <div id="display">00:00:00</div>
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Reset</button>
+            <button id="lap">Lap</button>
+            <ul id="lap-times"></ul>
+        </div>
+    </div>
+    
+<script>
+let timer; // To store the interval
+let running = false;
+let startTime;
+let elapsedTime = 0;
+let lapTimes = [];
+
+function startTimer() {
+  if (!running) {
+    running = true;
+    startTime = Date.now() - elapsedTime;
+    timer = setInterval(updateTime, 10);
+  }
+}
+
+function pauseTimer() {
+  if (running) {
+    running = false;
+    clearInterval(timer);
+  }
+}
+
+function resetTimer() {
+  running = false;
+  clearInterval(timer);
+  elapsedTime = 0;
+  lapTimes = [];
+  updateDisplay();
+}
+
+function lap() {
+  if (running) {
+    lapTimes.push(elapsedTime);
+    updateLapTimes();
+  }
+}
+
+function updateTime() {
+  elapsedTime = Date.now() - startTime;
+  updateDisplay();
+}
+
+function updateDisplay() {
+  let time = new Date(elapsedTime);
+  let display = time.toISOString().substr(11, 8);
+  document.getElementById("display").textContent = display;
+}
+
+function updateLapTimes() {
+  let lapList = document.getElementById("lap-times");
+  lapList.innerHTML = "";
+  lapTimes.forEach((lap, index) => {
+    let li = document.createElement("li");
+    li.textContent = `Lap ${index + 1}: ${formatTime(lap)}`;
+    lapList.appendChild(li);
+  });
+}
+
+function formatTime(time) {
+  let t = new Date(time);
+  return t.toISOString().substr(11, 8);
+}
+
+// Event listeners for buttons
+document.getElementById("start").addEventListener("click", startTimer);
+document.getElementById("pause").addEventListener("click", pauseTimer);
+document.getElementById("reset").addEventListener("click", resetTimer);
+document.getElementById("lap").addEventListener("click", lap);
+</script>
+
+  
+</body>
+</html>
